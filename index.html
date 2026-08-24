@@ -7,7 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<!-- jsQR 1.4.0, vendored locally: no third-party CDN can alter the code that
+     reads Bitcoin addresses, and the app keeps working offline.
+     sha256 bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859 -->
+<script src="jsQR.js"></script>
 <style>
 :root{
   --void:#0d1117;
