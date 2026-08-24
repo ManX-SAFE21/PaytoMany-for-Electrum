@@ -6,7 +6,7 @@
    Le unità satoshi (sat) sono la sottounità di BTC: 100 000 000 sat = 1 BTC. */
 window.APP_CONFIG = {
 
-  // Importo in euro già scritto nel campo "Euro" al passo 5 (Importi).
+  // Importo in euro già scritto nel campo "Euro" al passo 2 (Importi).
   // Cambia questo numero per cambiare il valore proposto di default.
   DEFAULT_EUR: 5,
 
