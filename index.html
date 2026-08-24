@@ -6,37 +6,48 @@
 <title>Paga a molti — Safe21</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <!-- jsQR 1.4.0, vendored locally: no third-party CDN can alter the code that
      reads Bitcoin addresses, and the app keeps working offline.
      sha256 bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859 -->
 <script src="jsQR.js"></script>
 <style>
+/* Design tokens mirrored from safe21.io so the app reads as part of the site:
+   dark "vault" base, teal primary accent, Bitcoin orange used sparingly. */
 :root{
-  --void:#0d1117;
-  --slab:#161b22;
-  --edge:#2a3038;
-  --signal:#ffc21a;
-  --confirm:#3ddc84;
+  --void:#0A0F1C;      /* --ink   · base background */
+  --slab:#111B2E;      /* --panel · cards */
+  --edge:#1F2B44;      /* --line  · hairline borders */
+  --signal:#2DD4BF;    /* --teal  · primary accent */
+  --signal-ink:#04201C;/* text on solid teal, as safe21's .btn-primary */
+  --confirm:#2DD4BF;   /* success reuses the teal accent */
+  --confirm-ink:#04201C;
+  --orange:#F7931A;    /* Bitcoin accent, sparingly */
   --alarm:#ff5d47;
-  --text:#e8eaed;
-  --mute:#7d8590;
+  --text:#F5F7FA;      /* --light */
+  --mute:#95A1B5;      /* --muted */
   --display:'Space Grotesk',system-ui,sans-serif;
-  --mono:'JetBrains Mono','SF Mono',monospace;
+  --body:'Inter','Segoe UI',Arial,sans-serif;
+  --mono:'Space Mono','SF Mono',monospace;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
-  background:var(--void);color:var(--text);font-family:var(--display);
+  background:var(--void);color:var(--text);font-family:var(--body);
   min-height:100dvh;padding-bottom:env(safe-area-inset-bottom);
+  -webkit-font-smoothing:antialiased;
 }
 .bar{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:14px 16px calc(14px);border-bottom:1px solid var(--edge);
   position:sticky;top:0;background:var(--void);z-index:10;
 }
-.brand{font-weight:700;font-size:15px;letter-spacing:-.01em}
-.brand b{color:var(--signal)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand svg{height:22px;width:auto;flex-shrink:0}
+.brand span{
+  font-family:var(--display);font-weight:600;font-size:13px;color:var(--mute);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 .tally{
   font-family:var(--mono);font-size:12px;color:var(--mute);
   border:1px solid var(--edge);border-radius:999px;padding:4px 10px;white-space:nowrap;
@@ -60,7 +71,7 @@ button{
 button:active{transform:scale(.985)}
 button:disabled{opacity:.35;cursor:not-allowed}
 button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
-.btn-go{background:var(--signal);color:#0d1117;border-color:var(--signal)}
+.btn-go{background:var(--signal);color:var(--signal-ink);border-color:var(--signal)}
 .btn-stop{background:var(--alarm);color:#fff;border-color:var(--alarm)}
 .btn-sm{font-size:13px;padding:11px 12px}
 .pair{display:flex;gap:10px}
@@ -91,12 +102,12 @@ button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
   top:calc(10px + env(safe-area-inset-top));z-index:60;
   display:flex;align-items:center;gap:10px;
   padding:12px 18px;border-radius:12px;font-weight:700;font-size:15px;
-  background:var(--confirm);color:#08130c;min-width:230px;justify-content:center;
+  background:var(--confirm);color:var(--confirm-ink);min-width:230px;justify-content:center;
   transition:transform .22s cubic-bezier(.2,.9,.3,1.2);
   box-shadow:0 8px 30px rgba(0,0,0,.5);
 }
 #banner.show{transform:translateX(-50%) translateY(0)}
-#banner.warn{background:var(--signal);color:#1a1400}
+#banner.warn{background:var(--orange);color:#1a1400}
 #banner.bad{background:var(--alarm);color:#fff}
 #banner .n{font-family:var(--mono);opacity:.75;font-size:13px}
 
@@ -120,13 +131,16 @@ button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
   text-transform:uppercase;color:var(--confirm);border:1px solid var(--confirm);
   border-radius:5px;padding:1px 6px;font-weight:700;
 }
-.amt{
+/* Selector must outrank the generic `input[type=text]{width:100%}` below,
+   otherwise the amount box eats the whole row and the address collapses to
+   zero width, wrapping one character per line. */
+input[type=text].amt{
   width:104px;flex-shrink:0;font-family:var(--mono);font-size:13px;text-align:right;
   background:var(--void);color:var(--text);border:1px solid var(--edge);
   border-radius:8px;padding:8px;
 }
-.amt:focus{outline:2px solid var(--signal);outline-offset:1px}
-.amt.under{border-color:var(--alarm);color:var(--alarm)}
+input[type=text].amt:focus{outline:2px solid var(--signal);outline-offset:1px}
+input[type=text].amt.under{border-color:var(--alarm);color:var(--alarm)}
 .kill{
   width:auto;flex-shrink:0;background:none;border:0;color:var(--mute);
   font-size:18px;padding:4px 2px;line-height:1;
@@ -173,7 +187,15 @@ pre.out{
 <body>
 
 <div class="bar">
-  <div class="brand">Safe<b>21</b> · Paga a molti</div>
+  <!-- SAFE21 wordmark, same keyhole motif and colours as safe21.io -->
+  <a class="brand" href="https://safe21.io" aria-label="SAFE21 — Paga a molti">
+    <svg viewBox="0 0 360 96" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SAFE21">
+      <defs><mask id="kh"><rect width="34" height="34" rx="8" fill="#fff"/><circle cx="17" cy="14" r="5" fill="#000"/><path d="M14 17 L20 17 L22 27 L12 27 Z" fill="#000"/></mask></defs>
+      <g transform="translate(14,30)"><rect width="34" height="34" rx="8" fill="#0D9488" mask="url(#kh)"/></g>
+      <text x="62" y="60" font-family="'Space Grotesk',Arial,sans-serif" font-size="40" font-weight="600" letter-spacing="4"><tspan fill="#F5F7FA">SAFE</tspan><tspan fill="#2DD4BF">21</tspan></text>
+    </svg>
+    <span>Paga a molti</span>
+  </a>
   <div class="tally" id="tally">0 letti</div>
 </div>
 
