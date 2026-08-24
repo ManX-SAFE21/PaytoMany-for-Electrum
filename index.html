@@ -216,10 +216,6 @@ pre.out{
 
     <button id="scanBtn" class="btn-go" onclick="toggleScan()">Avvia scansione</button>
 
-    <input type="file" id="imgFile" accept="image/*" hidden onchange="decodeImageFile(this.files && this.files[0]); this.value='';">
-    <button class="btn-sm" style="margin-top:10px" onclick="$('imgFile').click()">Leggi da immagine</button>
-    <p class="note">Utile per un QR con logo al centro, o già salvato come screenshot: la lettura da immagine ferma è più affidabile della fotocamera dal vivo.</p>
-
     <div class="card diag" id="camHelp" hidden>
       <h2>Fotocamera bloccata</h2>
       <p class="sub" id="camHelpText"></p>
@@ -622,27 +618,6 @@ function tick(){
     if (found && found.data) accept(found.data);
   }
   S.rafId = requestAnimationFrame(tick);
-}
-
-/* Legge un QR da un'immagine ferma (galleria/screenshot): a piena risoluzione
-   e con più tentativi, regge un logo centrale meglio della scansione dal vivo. */
-function decodeImageFile(file){
-  if (!file) return;
-  const url = URL.createObjectURL(file);
-  const im = new Image();
-  im.onload = () => {
-    URL.revokeObjectURL(url);
-    const buf = $('buf');
-    buf.width = im.naturalWidth; buf.height = im.naturalHeight;
-    const ctx = buf.getContext('2d', { willReadFrequently:true });
-    ctx.drawImage(im, 0, 0);
-    const img = ctx.getImageData(0, 0, buf.width, buf.height);
-    const found = jsQR(img.data, img.width, img.height, { inversionAttempts:'attemptBoth' });
-    if (found && found.data){ accept(found.data); }
-    else { bad('Nessun QR leggibile nell\'immagine'); }
-  };
-  im.onerror = () => { URL.revokeObjectURL(url); bad('Immagine non valida'); };
-  im.src = url;
 }
 
 function accept(raw){
