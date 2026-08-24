@@ -320,11 +320,11 @@ const SATS = 100000000;
    modificano da GitHub senza toccare questo file. Fallback qui sotto solo
    nel caso config.js non si carichi. */
 const CFG = window.APP_CONFIG || {};
-const CAP_QR_SATS    = CFG.CAP_QR_SATS    ?? 200000;   // 0.002 BTC
+const CAP_QR_SATS    = CFG.CAP_QR_SATS    ?? 20000;    // 0.0002 BTC
 const CAP_ROW_SATS   = CFG.CAP_ROW_SATS   ?? 500000;   // 0.005 BTC
-const CAP_TOTAL_SATS = CFG.CAP_TOTAL_SATS ?? 5000000;  // 0.05 BTC
+const CAP_TOTAL_SATS = CFG.CAP_TOTAL_SATS ?? 500000;   // 0.005 BTC
 const DUST_SATS      = CFG.DUST_SATS      ?? 330;
-const DEFAULT_EUR     = CFG.DEFAULT_EUR   ?? 2;
+const DEFAULT_EUR     = CFG.DEFAULT_EUR   ?? 5;
 
 /* ---------- feedback ---------- */
 let audioCtx = null;
