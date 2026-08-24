@@ -52,8 +52,8 @@ già scritto dentro il QR restano come sono.
 L'app genera la lista, una riga per destinatario:
 
 ```
-bc1qygc0jn8wu44zf3uvq5g6c3sc03xd7yxt0u55mr, 0.00002000
-bc1q9d4ywgfnd8h43da5tpcxcn6ajv590cg6d3tg6axemvljvt2k76zs50tv4q, 0.00002000
+bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4, 0.00002000
+bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3, 0.00002000
 ```
 
 Puoi **copiarla**, **salvarla come file .csv** o **condividerla**.
