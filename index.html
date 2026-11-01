@@ -185,6 +185,15 @@ pre.out{
 .steps span.past{background:var(--mute)}
 .note{font-size:12.5px;color:var(--mute);line-height:1.6;margin:12px 0 0}
 .note b{color:var(--text);font-weight:700}
+/* Prominent warning: Electrum reads the amounts in its own base unit, and its
+   default (mBTC) makes this list ~1000x too small without any error. */
+.unit-warn{
+  border:2px solid var(--orange);border-left-width:6px;border-radius:14px;
+  background:rgba(247,147,26,.10);padding:14px 16px;margin-bottom:14px;
+}
+.unit-warn h2{margin:0 0 6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)}
+.unit-warn p{margin:0;font-size:14px;line-height:1.55;color:var(--text)}
+.unit-warn p+p{margin-top:8px;font-size:13px;color:var(--mute)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -280,6 +289,11 @@ pre.out{
 
   <!-- ============ 3 · EXPORT ============ -->
   <section id="s3" hidden>
+    <div class="unit-warn" role="alert">
+      <h2>Prima di incollare: unità su BTC</h2>
+      <p>In Electrum vai su <b>Strumenti → Preferenze → Aspetto → Unità base</b> e scegli <b>BTC</b>.</p>
+      <p>Con mBTC (l'unità predefinita), sat o bits gli importi vengono letti sbagliati, senza nessun errore. Prima di firmare controlla sempre il totale.</p>
+    </div>
     <div class="card">
       <h2>Lista per Electrum</h2>
       <p class="sub">In Electrum apri il menu accanto al campo <b>Paga a</b>, scegli <b>Paga a molti</b> e incolla queste righe.</p>
