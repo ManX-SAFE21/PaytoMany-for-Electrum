@@ -117,10 +117,33 @@ Adopted safe21.io's design tokens so the app reads as part of the site:
 `--muted #95A1B5`, teal `#2DD4BF` as the primary accent, Bitcoin orange
 `#F7931A` reserved for warnings. Type stack matched too — Inter for body,
 Space Grotesk for headings, Space Mono for addresses and figures. The SAFE21
-keyhole wordmark sits in the header at 44px, linking back to safe21.io, with
+keyhole wordmark sits in the header (44px at first; see "Header and icon"
+for the current responsive sizes), linking back to safe21.io, with
 "Paga a molti" and "(Pay to many)" stacked beside it — stacked rather than
 inline because at 44px the wordmark plus the counter badge leaves too little
 width on a 375px screen, and the text truncated.
+
+**Header and icon.** The app icon (a thick straight white arrow entering from
+the left and splitting into four thin curved teal arrows, safe21.io colours)
+is in `icons/` — SVG, 192/512 PNG, a 512 maskable with its content inside
+Android's circular safe zone, 180 apple-touch, 48 favicon — wired up through
+`manifest.webmanifest` so "Add to Home screen" shows it. The same icon sits
+left of "Paga a molti" in the header. Header width is a budget: wordmark +
+icon + two-line label + counter must fit one row, so logo/icon step down on
+narrow phones (44/40px at 388px+, 40/38px under 388px, 36/34px under 371px)
+instead of truncating the text. Measured at 412, 375 and 360px. A first
+breakpoint at 380px was wrong — it fired at 375px too and silently shrank the
+logo there.
+
+**Updates without clearing the browser cache.** `sw.js` is a network-first
+service worker: same-origin requests go to the network bypassing the HTTP
+cache, and the saved copy is used only offline. GitHub Pages sends
+`max-age=600` and a phone browser or home-screen shortcut can keep serving an
+old copy well past that. **Not testable in the desktop app's embedded browser
+pane** (it refuses to register any service worker, even for valid files), so
+it was only syntax-checked there. Its real behaviour still has to be confirmed
+on a phone: publish a change and check it appears on the next open. Phones
+running a version from before it existed need one manual refresh to pick it up.
 
 **Privacy.** The README's example output originally used the owner's real
 receive address, taken from a screenshot shared while debugging. Replaced
@@ -141,6 +164,31 @@ values, with euro equivalents at roughly €67,500/BTC:
 
 At €5 per recipient this allows roughly 67 recipients before the
 confirmation prompt.
+
+---
+
+## Electrum compatibility (tested 2026-11-01)
+
+The app's output is one `address, amount` line per recipient, which Electrum's
+"Pay to many" parses in `PaymentIdentifier.parse_address_and_amount`. Checked
+against **Electrum 4.8.3**, first by feeding the list to that parser, then in
+the real GUI on testnet4 with the same two lines (2 × 7,409 sat, i.e. 0.00007409):
+
+| Base unit in Electrum | Total read | Pay… button | Result |
+|---|---|---|---|
+| sat | 0 sat | disabled | wrong, but blocked |
+| **BTC** | **14,818 sat** | enabled | **correct** |
+| mBTC (Electrum's default) | 14 sat | enabled | wrong, **not blocked, no error** |
+
+The amount is parsed as `int(10**decimal_point * Decimal(x))`, so the list is
+only correct with the base unit on **BTC**. `DECIMAL_POINT_DEFAULT` in
+Electrum is `5` (mBTC), so a fresh install gets it wrong with no warning.
+
+Hence the orange callout at the top of step 3 and the matching note in the
+README. The app cannot detect Electrum's setting; it can only warn. What
+happens after pressing Pay… in the mBTC case was **not tested** — Electrum
+probably rejects the 7-sat outputs as dust when building the transaction, but
+that is unverified.
 
 ---
 

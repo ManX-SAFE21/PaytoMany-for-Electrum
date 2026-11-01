@@ -62,6 +62,15 @@ In Electrum poi: apri il menu accanto al campo **Paga a**, scegli
 **Paga a molti**, incolla le righe. Electrum fa il resto — sceglie le monete,
 calcola la commissione, firma e trasmette.
 
+> ⚠️ **Prima di incollare, metti l'unità di Electrum su BTC.**
+> Vai su **Strumenti → Preferenze → Aspetto → Unità base** e scegli **BTC**.
+>
+> Electrum legge gli importi nell'unità che hai scelto lui. L'unità
+> predefinita è **mBTC**: con quella (o con sat e bits) la lista viene letta
+> con importi sbagliati — 1000 volte più piccoli o a zero — **senza nessun
+> messaggio di errore**. Controlla sempre il **totale** prima di firmare.
+> L'app ti ricorda questo avviso anche nel terzo passo.
+
 ---
 
 ## Cosa NON fa (è voluto)
@@ -91,7 +100,8 @@ qualcuno. È l'ultimo momento utile per accorgersene.
   Se apri il file salvato sul computer con doppio clic, la fotocamera **non
   parte**: è una regola del browser, non un difetto dell'app. In quel caso
   l'app te lo spiega e ti offre di scrivere gli indirizzi a mano.
-- Electrum Desktop per la parte finale.
+- Electrum Desktop per la parte finale, con l'**unità base su BTC** (vedi
+  l'avviso nel passo 3). Provato con la versione **4.8.3**.
 
 ---
 
